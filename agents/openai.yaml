@@ -1,0 +1,3 @@
+interface:
+  display_name: "Paper to AutoResearch"
+  short_description: "Build benchmark-aligned AutoResearch tasks from papers"

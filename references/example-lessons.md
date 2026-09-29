@@ -1,0 +1,17 @@
+# What the supplied Example demonstrates
+
+Read this only when the user supplies the `example/` directory or asks to follow it. Inspect the files afresh because the copy may change. These are observations about the supplied 2026 Example, not a universal design for other papers.
+
+| Demonstrated pattern | Actual files and limit |
+|---|---|
+| Role separation | `workspace/harbor_task/solution/method.py` begins as the Starter; `workspace/reference/method.py` is private and uses the same callable interface; `expert_evidence/best_method/` is the later Agent choice. Agent is allowed to discover a different method. |
+| Method space | Starter concatenates frames/events with a residual block. Reference adds directional event encoders, gated multiscale fusion and a combined loss. `tests/train_eval.py` calls `build_model` and `training_loss`; `tests/security.py` must be checked to confirm the surface is executable, not merely described. |
+| Frozen measurement | `tests/train_eval.py` owns 12 epochs, data loading, optimizer, LPIPS/PSNR/SSIM, parameter bound and checkpoint; `tests/score.py` owns the continuous LPIPS normalization. Those numbers are task-specific. |
+| Optimization evidence | Each of five Baseline and five Reference run directories has `result.json`, raw `run.log`, checkpoint metadata and reload log; `comparison_summary.json` uses all paired runs and Baseline sample standard deviation. The exact five seeds are historical facts, not a default count. |
+| Dataset and metric provenance | Public train/dev manifests record archive hashes and source segments; `DATA_ATTRIBUTION.md` records data and weight licenses. Binary `.npz` and model files need safe structural/hash inspection, not untrusted deserialization to read the format. |
+| Platform gap | Example `task.toml` uses historical `[resources]` and `[entrypoint]` fields; `tests/test.sh` runs pytest only, and `grader.py` prints JSON. No delivered `tests/test.sh` path writes Harbor reward. This Example alone does **not** prove native Harbor launch readiness. |
+| Evidence gap | The present `expert_evidence/README.md` describes `agents/`, post-validation and ablation directories that are absent. The two packaged trajectory JSON files contain 18 and 19 rounds with only `round` and `method_summary`, while `run_summary.json` claims 408 and 34 rounds. Their summaries discuss relational routing/attention rather than this event-camera interpolation task. The later tutorial also calls for eight fields per round. Do not treat these trajectories as valid evidence for this Example without correction and source records. |
+
+Additional pitfalls in the supplied copy: `expert_evidence/run_summary.json` selects the winner by five-seed **Hidden** mean LPIPS, whereas the current tutorial requires Public/Dev selection before final evaluation. `grader.py` assigns -1 to every failure and the prompt repeats that rule, contrary to the tutorial's distinct failure semantics. The prompt also lists concrete optimization recipes close to the Reference. Do not copy these choices. Existing B/R hash and metric consistency supports internal consistency only, not an independent rerun or certification of authenticity.
+
+The reusable lesson is to reproduce the **roles and invariants** under the new paper's benchmark, then trace the exact command from Agent edit through public feedback and trusted final reward. Do not copy the event-camera task, LPIPS score, five seeds, paths, or historical Harbor TOML as a template for every paper.

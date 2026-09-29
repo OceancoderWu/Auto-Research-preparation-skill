@@ -1,0 +1,62 @@
+# Package, platform, and evidence checks
+
+Use this when implementing the runnable task or deciding whether it can start under the target harness.
+
+## Build around the active format
+
+Read the current submission rubric and target platform's installed schema. A prior example may show `workspace/harbor_task/{instruction.md,task.toml,environment,solution,tests}` plus sibling `reference`, `optimization_evidence`, and `expert_evidence`, but treat that as a format only when the current rubric requires it. Reconcile Docker build context, `COPY` paths, mount paths, working directory, test entrypoint, artifact handoff, and reward file with the actual Harbor version. A successful config parse or unit test is not proof that a Harbor run returns a reward.
+
+When the supplied tutorial is the active format, deliver the following roles. The internal module filenames may change with the paper; directory visibility and responsibility must remain coherent.
+
+| Location | Required responsibility |
+|---|---|
+| `workspace/harbor_task/` | Agent-facing `instruction.md`, version-compatible `task.toml`, `environment/` with Dockerfile/dependencies/public assets/Starter, editable `solution/`, and trusted `tests/` scorer. `tests/hidden_assets/` is empty at delivery if external injection is used. |
+| `workspace/reference/` | Runnable expert Reference with the same candidate interface; excluded from the Agent's delivered image and mounts. |
+| `optimization_evidence/` | Formal Baseline/Reference paired evidence, not Agent search history. Include task-specific evidence explanation, all declared run directories, and a recomputable comparison summary. |
+| `expert_evidence/` | Now: preparation explanation and factual annotation, plus the later evidence collection contract. After user-launched research: actual run summary, required independent trajectories and revalidated `best_method/`. Mark those later artifacts pending; never fill them with invented history. |
+
+The task designer (human or preparing Codex) selects the paper benchmark, fixes data/protocol, builds the package, and produces Baseline/Reference evidence. The research Agent receives only the declared task view and iterates on its permitted method surface. The trusted verifier computes reward. The task designer later collects Agent trajectories and validates the selected method. Keep these responsibilities distinct even when one machine runs several roles.
+
+For each formal Baseline and Reference run, retain real `result.json` with role/seed/status, method and dependency hashes, protocol, actual training/execution, raw metrics, quality gates and artifact paths; retain original `run.log`, including warnings/failures. For training tasks, retain that run's real checkpoint, SHA-256/size/source metadata, and independent reload/rescore log. For non-training tasks, mark model artifacts not applicable rather than creating empty model directories. Keep all declared seeds, including invalid attempts, and compute `comparison_summary.json` from the source records. Never take the best run or rename seeds. Distinguish training seeds from repeated stochastic evaluation of one model.
+
+Prepare the later evidence workflow now; do not run research trajectories in this skill. Read model combinations and reasoning settings from the active tutorial/task card (the supplied tutorial specifies Codex + GPT-5.6 Sol and Codex + Seed 2.1 Turbo, maximum reasoning by default). Configure the same prompt, task revision, Public/Dev evaluator and resource limits, independent empty outputs, and no access to the other Agent's trajectory or best method. Model names are versioned program requirements, not permanent defaults for every paper.
+
+The later trajectories default to each ≥10 effective hours. The ≥7h exception requires a non-training/non-fine-tuning task, measured short iterations, each trajectory ≥3 effective method loops, continuing method evolution and at least one next research direction, independently verifiable effective time, and a clean successful best-method rerun. Genuine method failures can count as loops; environment-only debugging cannot. Exclude queue/setup/build failures/blocked periods. Prepare summary fields for these conditions, never prefill success. A required 12h environment soak is a separate preparation stability check; it does not require running research Agents.
+
+Each later round records `round` (integer from 1), `policy_name`, `method_summary` (1–3 sentences), `status` (`ok` or true failure type), `score` (Public/Dev **raw metric**, null if no score), `failure_reason` (null on success), `retained_best` (boolean), and `time` (`YYYY-MM-DD HH:mm:ss`, declared timezone). Collect JSONL during execution and export ordered `rounds` arrays. Keep model/effective duration in the run summary, not extra round fields. Match rounds, evaluator results and source hashes; retain the actual evidence without inventing missing fields.
+
+Configure future selection on the predeclared **same Public/Dev protocol**, highest valid normalized score with declared tie-breaking, then cleanly rerun and freeze the selected source. Final/Hidden evaluation must not choose or revise the winner. A published test set remains final-only if assigned that role. Only the later run can produce `best_method/` and completed trajectories; tutorial long-run acceptance remains post-launch.
+
+When the supplied tutorial applies, also prepare the secure handoff for non-public evaluation assets, Hidden data, and original-solution source Blacklist. Record the approved destination, version/hash where appropriate and delivery status privately; do not put those materials in the Agent bundle or publish them without authorization. Missing credentials, access or required delivery is a concrete preparation blocker.
+
+Keep evidence JSON paths relative to the submission root. Prepare `expert_annotation.json` with task identity/type, research direction/surface, metric direction, actual split/protocol, B/R/U and U provenance, and isolation declarations backed by checks. Do not add `approved`, `audit_passed` or official Hidden results. Future run summaries must distinguish planned model/duration from actual execution; do not claim future self-validation. `训练证据说明.md` explains the current real B/R evidence; the owner report explains the entire preparation and can supply the preparation portion of `专家作业说明文档.md` without pretending research has occurred.
+
+Keep roles separate:
+
+- Agent-visible: prompt, Starter, allowed source, public data/runner, and feedback.
+- Trusted evaluator: fixed training and scoring code, final data access, integrity checks, and reward emission.
+- Expert-only: Reference source, comparison evidence, private keys, and any truly private labels.
+
+Do not mistake the ability to run SSH commands for permission to alter trusted grading files. If the Agent operates a remote GPU through a local container, specify identity and permissions on both hosts, host-key handling, file transfer, results transfer, and which copy of the source becomes the final artifact. Allow ordinary remote shell use when it is part of the intended workflow while keeping trusted assets inaccessible to the Agent identity.
+
+The formal `tests/test.sh` must call the trusted scorer and write Harbor's reward file; a contract-only pytest script is a separate check. Ensure reward comes from trusted computation, not candidate stdout or `result.json`. Clear stale reward files and publish a finite numeric reward atomically. Implement the active failure contract, including distinct status/error type and exit behavior. Under the supplied tutorial, non-cheating Hard Gate violations return -1 as invalid, excluded from normal ranking; format errors, timeout, resource exhaustion, evaluator and infrastructure failures must not all become -1 or 0 scores. A valid unclipped score may numerically equal -1, so validity must come from status, not the number alone. Hidden access, grading tampering or fabricated results require an isolation-failure blocker and environment repair, not merely a penalty. Map failures to the installed Harbor interface without fabricating a successful reward; clear stale rewards on failed evaluations too. If the public command and final verifier run different entrypoints, verify that they still implement the declared common training/evaluation rules.
+
+Generate an allowlist or manifest of the actual Agent-visible final image and mounts, including paths, owners, permissions and hashes; compare it against the intended delivery. A README saying that Reference/Hidden is invisible is not proof. Review image layers, caches, environment, Git objects and remote permissions as relevant to the deployment. Protect the trusted runner from candidate-controlled imports, paths, files and result destinations.
+
+## Readiness gates
+
+| Gate | Evidence needed |
+|---|---|
+| Design defined | Benchmark slice, source alignment, search surface, protocol, score, visibility, budgets, and instruction agree on paper. |
+| Static ready | Files exist; hashes and syntax/contracts pass; Docker context/config/paths are consistent; no private material is packaged into Agent view. |
+| Public runtime ready | Clean environment launches; a runnable Starter reaches actual public feedback; for a method-free Scaffold, check its interface and expected incomplete-submission feedback, then prove scoring with the separate Baseline or a declared legal validation candidate without replacing the Scaffold; command output and machine-readable result return to the Agent. |
+| Evaluation ready | Authorized Baseline/Reference runs and required evidence are real; anchors are measured; the trusted final-entrypoint integration consumes a fixed validation artifact and emits a valid reward using declared public/validation assets. This checks the scoring path, not official Hidden performance or acceptance; verify the external injection contract separately when the platform owns final assets. |
+| Ready for user launch | All applicable preparation gates above, model/auth access, resource/time controls, launch configuration, isolated output/evidence collection and a bounded fixed-candidate platform smoke checked on the intended topology; the actual research launch has not been executed. |
+| Research evidence complete (post-launch) | Actual independent trajectories, required effective durations, Public/Dev selection and clean best-method rerun; not produced or claimed by preparation. |
+| Platform finally accepted (external) | Platform-issued formal Hidden, anti-cheating and acceptance results; never inferred from local preparation or a successful smoke. |
+
+For a ready-for-user-launch claim, also verify applicable platform resource controls, the bounded validation Trial's config/result/reward/log agreement where supported, and the stability/containment checks required by the active rubric. Static QA may intentionally skip a platform resource item while the platform requirement remains in force.
+
+The names above describe evidence, not mandatory separate deliverables. Apply gates relevant to the user's requested stage. If the user explicitly forbids experiments, perform static checks and label runtime gates pending. A launch-ready request normally includes the necessary runtime checks; do not call the task ready without them. Long Agent research trajectories are post-launch obligations: prepare their configuration and collection, but leave execution to the user. A later explicit request to run them is a separate workflow. If the user requests launch later, verify current state first; old audit reports can be stale.
+
+Evidence should retain raw stdout/stderr, true commands, timestamps, exit codes, source and asset hashes, metrics, seeds, and artifacts required by the rubric. Mark missing or unrun values as such. Do not manufacture model files, logs, anchor values, or run summaries from templates. Report the shortest concrete blocker list and the next executable command or user-supplied credential required to clear it.
