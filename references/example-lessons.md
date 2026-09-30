@@ -1,6 +1,6 @@
 # What the supplied Example demonstrates
 
-Read this only when the user supplies the `example/` directory or asks to follow it. Inspect the files afresh because the copy may change. These are observations about the supplied 2026 Example, not a universal design for other papers.
+Read this only when the user supplies the historical `example/` directory or asks to follow it. Inspect the files afresh because the copy may change. These are observations about the supplied event-interpolation Example, not a universal design for other papers or the current dual-image package.
 
 | Demonstrated pattern | Actual files and limit |
 |---|---|
@@ -15,3 +15,9 @@ Read this only when the user supplies the `example/` directory or asks to follow
 Additional pitfalls in the supplied copy: `expert_evidence/run_summary.json` selects the winner by five-seed **Hidden** mean LPIPS, whereas the current tutorial requires Public/Dev selection before final evaluation. `grader.py` assigns -1 to every failure and the prompt repeats that rule, contrary to the tutorial's distinct failure semantics. The prompt also lists concrete optimization recipes close to the Reference. Do not copy these choices. Existing B/R hash and metric consistency supports internal consistency only, not an independent rerun or certification of authenticity.
 
 The reusable lesson is to reproduce the **roles and invariants** under the new paper's benchmark, then trace the exact command from Agent edit through public feedback and trusted final reward. Do not copy the event-camera task, LPIPS score, five seeds, paths, or historical Harbor TOML as a template for every paper.
+
+## What the 2026-09-29 PCA teaching example adds
+
+When supplied, inspect `pca_teaching_example/` as a **dual-image layout demonstration**, not a validated task. Its Agent `environment/Dockerfile` copies Starter, public assets and `public_eval/` from its own context and initializes runtime `/workspace/solution`. Its `tests/Dockerfile` has a separate private build context; `task.toml` declares `artifacts=["/workspace/solution"]` and separate verifier mode; `/tests/test.sh` consumes that artifact and writes reward. These are the reusable handoff roles. The sample PCA implementation, scoring values, `schema_version="1.3"`, CPU and memory limits are specific to the example or installed platform version.
+
+The example explicitly reports that Docker/Harbor and official Hidden were not run. Its `optimization_evidence/comparison_summary.json` is `NOT_RUN`; trajectories are empty and `best_method/` is pending. Its original native score is clipped/piecewise and does not yet meet the tutorial's normalized-score, Reference-range and failure-contract gates. Do not convert any of those pending or known-failing checks to passed merely because the file layout is useful. The current tutorial's double-image details are in [dual-image Harbor handoff](dual-image-harbor.md).

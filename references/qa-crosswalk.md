@@ -1,6 +1,6 @@
 # Authoring crosswalk for the supplied AutoResearch QA materials
 
-Read this when the task uses the supplied `autoresearch-qa-skills` and *AutoResearch 专家线下标注教程*. It is an authoring checklist, not a replacement for the current source files. Resolve conflicts in this order: explicit user decision and current task card for scope; current tutorial/format rules for submission; installed Harbor schema for machine behavior; version-matched QA policy for review; Example for illustration only. A user decision that departs from a mandatory rubric is a disclosed exception, not silent compliance. The QA folder's default `implementation` policy and its old `strict` policy differ; `qa-spec.md` and `report-schema.md` describe that legacy strict mode and must not silently override the current tutorial. Record source revision and decisions.
+Read this when the task uses the supplied `autoresearch-qa-skills` and *AutoResearch 专家线下标注教程*. It is an authoring checklist, not a replacement for the current source files. Resolve conflicts in this order: explicit user decision and current task card for scope; current tutorial/format rules for submission; installed Harbor schema for machine behavior; version-matched QA policy for review; Example for illustration only. A user decision that departs from a mandatory rubric is a disclosed exception, not silent compliance. The 2026-09-29 *PCA 双镜像对齐版* explicitly changes the earlier tutorial's single-image packaging, Agent view and final handoff while retaining its research-quality/statistical requirements. The older `规范格式.docx`, event-interpolation Example and 2026-09-18 QA Docker-path profile must not override it when the new revision governs. The QA folder's default `implementation` policy and its old `strict` policy also differ; `qa-spec.md` and `report-schema.md` describe that legacy strict mode and must not silently override the current tutorial. Record source revision, installed Harbor version and decisions.
 
 ## Stage applicability
 
@@ -40,7 +40,7 @@ The separate Baseline-quality skill expands G02 into eight checks: **B01** task-
 | QA14 | Preserve at least one legal, discoverable direction after Reference; neither saturate the score nor tell the Agent that direction. |
 | QA15 | The default static QA skips this ID. Still implement resource and one-score limits required by the active task card/tutorial and verify them on the platform. |
 | QA16 | When final expert trajectories are required, account for **each** Agent's effective method time separately. Current tutorial default is each ≥10h; each ≥7h only for a non-training task with short iterations and all exception evidence. A 12h container soak is separate. |
-| QA17 | Verify Harbor task root, versioned config, provider/build paths, actual verifier reward, invocation configuration when supplied, and same-Trial runtime evidence when supplied (H01–H06 below). |
+| QA17 | Verify Harbor task root, installed-version `separate` and `artifacts` behavior, both image builds, provider paths, actual verifier reward, invocation configuration when supplied, and same-Trial transfer/runtime evidence when supplied (H01–H06 below). The older QA helper may still assume a task-root build context; classify that as a policy-version mismatch and review the active contract independently. |
 | QA18 | Preserve two independent, task-matching Agent method trajectories and a real progression analysis when the current tutorial requires them; B/R runs are not Agent trajectories. |
 | QA19 | Explain seed and effective-improvement rule in the prompt for stochastic evaluation; preserve the complete formal run protocol in expert evidence even if this narrow QA item does not require every detail in the prompt. |
 | QA20 | State editable/readable scope, network and tool policy, and how the Agent reaches public jobs; implement the relevant restrictions without confusing command access with submitted-code access. |
@@ -50,12 +50,12 @@ The separate Baseline-quality skill expands G02 into eight checks: **B01** task-
 
 | ID | Evidence to prepare |
 |---|---|
-| H01 | Complete selected task root and referenced files; `tests/test.sh` is the normal Linux one-step verifier entry. |
-| H02 | Valid TOML **and** fields accepted by the installed Harbor version or a delivered adapter; syntax alone is insufficient. |
-| H03 | One consistent Docker/provider profile: context, `COPY`, workdir, runtime mounts and executable paths. The teaching Example uses task-root context and `/workspace`; native Harbor commonly uses `environment/` context and injects `/tests` and `/solution`. Do not mix profiles. |
-| H04 | Trusted `tests/test.sh` actually evaluates and writes finite `/logs/verifier/reward.txt` or a numeric `reward.json`; pytest-only success or stdout score is insufficient. |
-| H05 | If a Job/Trial or CLI config is supplied, check task selection, provider, agent, overrides, network/resources, and enabled verifier. It is not mandatory to invent job.yaml for a single-task CLI. |
-| H06 | If a Harbor Trial is claimed, retain matching config, result, reward, and logs from the same run and reconcile reward values. Without a trial, report runtime unverified. |
+| H01 | Complete selected platform task root, Agent `environment/` context and private `tests/` context; `tests/test.sh` is the normal Linux final verifier entry. A source-tree `solution/` is not required by the active dual-image tutorial. |
+| H02 | Valid TOML **and** `artifacts` and `verifier.environment_mode="separate"` accepted and effective in the installed Harbor version or a delivered adapter; the PCA sample's schema version is not universal. |
+| H03 | Build Agent from `environment/` and separate Verifier from `tests/` when the 2026-09-29 tutorial governs. Reconcile each context's `COPY`, workdir, runtime `/workspace/solution`, public scoring, private `/tests` and only the declared artifact transfer. Older task-root/one-image profiles are historical for this revision. |
+| H04 | After the Agent exits, trusted `/tests/test.sh` in the separate Verifier actually scores the transferred candidate and writes finite `/logs/verifier/reward.txt` or numeric `reward.json`; pytest-only success or stdout score is insufficient. Probe candidate access to private labels/reference, `/tests` and reward. |
+| H05 | If a Job/Trial or CLI config is supplied, check selected task, both image providers, agent, `separate`/artifact overrides, network/resources and enabled verifier. It is not mandatory to invent job.yaml for a single-task CLI. |
+| H06 | For launch readiness, retain one bounded non-search Trial's config, both image IDs, transfer manifest, verifier result/reward and logs, reconciling values and isolation on the same run. Without it, report runtime handoff unverified; official Hidden still belongs to later platform acceptance. |
 
 ## Scope of security and runtime checks
 
